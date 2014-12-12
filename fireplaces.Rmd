@@ -67,4 +67,31 @@ FFXdata <- rbind(PDDataA, PDDataB, PDDataC, PDDataD, PDDataE, PDDataF, PDDataG, 
 rm(PDDataA, PDDataB, PDDataC, PDDataD, PDDataE, PDDataF, PDDataG, PDDataH)
 ```
 
+With all the data loaded into R, it is possible to perform more cleanup to the data. The county data includes all parcels, and has 360,038 observations of 142 variables. We need to remove any non-residential records. We also want to remove records with data anomolies such as a house built in a year that has not yet occurred, select only the fields we are most interested in, and give them easier to understand field names. We can also use the mutate function to change character data into integers, and create a column that will give us the decade a house was built. We end up with 282,551 observations of 15 variables.
 
+```
+# these are the codes for various residential land uses, which I will need further down. 
+residential_codes <- c(011, 012, 013, 014, 015, 021, 029, 031, 032, 033, 034, 035, 036, 037, 039, 040, 041, 042, 043, 044, 045, 046, 047, 048, 049)
+
+FFX_res_data <- FFXdata %>%
+ filter(LUC%in% residential_codes) %>%
+ select(parcel_id = PARID,
+        address_number = ADRNO,
+        address_number_suffix = ADRADD,
+        street_direction = ADRDIR,
+        street_name = ADRSTR,
+        street_suffix = ADRSUF,
+        city_name = CITYNAME,
+        zip = ZIP1,
+        sale_price = PRICE,
+        sale_date = SALEDT,
+        fireplaces = WBFP_O...WBFP_PF,
+        year_built = YRBLT,
+        land_use_code = LUC,
+        sqft_living_area = SFLA) %>%
+  mutate(decade = round_year(year_built, round_to = "decade")) %>%
+  mutate(fireplaces = as.integer(fireplaces)) %>%
+  mutate(sqft_living_area = as.integer(sqft_living_area)) %>%
+  filter(year_built < 2100) 
+  tbl_df(FFX_res_data)
+```
