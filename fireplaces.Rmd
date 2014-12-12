@@ -35,7 +35,7 @@ The first tests for converting the data used a short file in order to see what i
 
 There were two separate phases: getting the layout file, which describes the fields and their length, into usable shape, and then using that information to parse the data file into fields. Not all entries in the layout file included information about the length of the field, so the first step was to filter out the layout entries that do not have a value in the LENGTH field.
 
-```{r}
+```
 layout <- read.csv("PDLayout.csv", stringsAsFactors = FALSE)
 library(dplyr)
 layout <- layout %>%
@@ -43,8 +43,28 @@ filter(!is.na (LENGTH))
 
 ```
 
-Then, read the fixed width format data into a file.
-```{r}
+Then, read the fixed width format data into a file. This is a test file to start with. In one of the tests, the presence of # and tabs in the data required the above mentioned manual clean up. This is where in the process I discovered that issue.
+```
 PDData <- read.fwf("firstrowsB.txt", widths = layout$LENGTH, col.names = layout$COLUMN.NAME)
 head(PDData)
 ```
+
+Here all the chunked files get read in, then the separate pieces get bound together to work as one.
+```
+PDDataA <- read.fwf("cleanedFFXDataAA.txt", widths = layout$LENGTH, col.names = layout$COLUMN.NAME,
+                    stringsAsFactors = FALSE)
+PDDataB <- read.fwf("cleanedFFXDataAB.txt", widths = layout$LENGTH, col.names = layout$COLUMN.NAME,  stringsAsFactors = FALSE)
+PDDataC <- read.fwf("cleanedFFXDataAC.txt", widths = layout$LENGTH, col.names = layout$COLUMN.NAME,  stringsAsFactors = FALSE)
+PDDataD <- read.fwf("cleanedFFXDataAD.txt", widths = layout$LENGTH, col.names = layout$COLUMN.NAME,  stringsAsFactors = FALSE)
+PDDataE <- read.fwf("cleanedFFXDataAE.txt", widths = layout$LENGTH, col.names = layout$COLUMN.NAME,  stringsAsFactors = FALSE)
+PDDataF <- read.fwf("cleanedFFXDataAF.txt", widths = layout$LENGTH, col.names = layout$COLUMN.NAME,  stringsAsFactors = FALSE)
+PDDataG <- read.fwf("cleanedFFXDataAG.txt", widths = layout$LENGTH, col.names = layout$COLUMN.NAME,  stringsAsFactors = FALSE)
+PDDataH <- read.fwf("cleanedFFXDataAH.txt", widths = layout$LENGTH, col.names = layout$COLUMN.NAME,  stringsAsFactors = FALSE)
+
+# take all the data pieces and bind them into one object, then remove all the little objects to free up memory.
+
+FFXdata <- rbind(PDDataA, PDDataB, PDDataC, PDDataD, PDDataE, PDDataF, PDDataG, PDDataH)
+rm(PDDataA, PDDataB, PDDataC, PDDataD, PDDataE, PDDataF, PDDataG, PDDataH)
+```
+
+
