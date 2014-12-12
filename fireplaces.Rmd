@@ -30,3 +30,21 @@ Given all of these issues, one might expect that fireplaces would disappear from
 ##Fireplaces in Fairfax County Homes
 
 In order to examine fireplaces in Fairfax County, VA, this study uses real estate assessment records from the county Department of Tax Administration (DTA). I requested access to the records, persuant to the Virginia Freedom of Information Act, and made arrangements with the DTA to download the records through FTP. Maintained by the county as a Microsoft Access database, I exported the data as a fixed-width file, which required significant cleanup in order to work successfully in the R environment. Some of the cleanup was easy to do programmatically, although some of the cleanup had to be done manually, in order to preserve the spacing needed to read the data correctly in the fixed-width file. Inconsistencies such as the # symbol in some records but not others, interchangeable use of tabs and spaces, and other data anomolies were corrected directly in a text editor. Chunking the data into managable file sizes and converting the data into a comma separated value format were done programmatically.
+
+The first tests for converting the data used a short file in order to see what issues came up, then used progressively larger files to find other issues.
+
+There were two separate phases: getting the layout file, which describes the fields and their length, into usable shape, and then using that information to parse the data file into fields. Not all entries in the layout file included information about the length of the field, so the first step was to filter out the layout entries that do not have a value in the LENGTH field.
+
+```{r}
+layout <- read.csv("PDLayout.csv", stringsAsFactors = FALSE)
+library(dplyr)
+layout <- layout %>%
+filter(!is.na (LENGTH))
+
+```
+
+Then, read the fixed width format data into a file.
+```{r}
+PDData <- read.fwf("firstrowsB.txt", widths = layout$LENGTH, col.names = layout$COLUMN.NAME)
+head(PDData)
+```
