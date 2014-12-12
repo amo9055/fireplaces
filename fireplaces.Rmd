@@ -1,0 +1,7 @@
+---
+title: "Fireplaces"
+author: "Allison O'Connor"
+date: "December 12, 2014"
+output: html_document
+---
+
