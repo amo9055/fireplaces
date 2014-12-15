@@ -31,15 +31,28 @@ Given all of these issues, one might expect that fireplaces would disappear from
 
 In order to examine fireplaces in Fairfax County, VA, this study uses real estate assessment records from the county Department of Tax Administration (DTA). I requested access to the records, persuant to the Virginia Freedom of Information Act, and made arrangements with the DTA to download the records through FTP. Maintained by the county as a Microsoft Access database, I exported the data as a fixed-width file, which required significant cleanup in order to work successfully in the R environment. Some of the cleanup was easy to do programmatically, although some of the cleanup had to be done manually, in order to preserve the spacing needed to read the data correctly in the fixed-width file. Inconsistencies such as the # symbol in some records but not others, interchangeable use of tabs and spaces, and other data anomolies were corrected directly in a text editor. Chunking the data into managable file sizes and converting the data into a comma separated value format were done programmatically.
 
-Houses in Fairfax County, VA, that survive today from the eighteenth and nineteenth centuries are much larger than typical houses of the time. In colonial Virginia, a typical tenant farmer's home would have been about 16 feet long by 16 feet wide, for a total of approximately 256 square feet.^[John Ball’s house, today known as the Ball-Sellers House and located in present-day Arlington, VA (originally part of Fairfax County, and then part of the District of Columbia), is a rare surviving example of this type of home.  Built by John Ball, who lived in the house with his wife and five daughters, it measured approximately 16 feet square, had one door and one window, with a dirt floor and a partial loft above accessed by a steep ladder placed in the corner. It had a wattle and daub chimney and a stone hearth.  Wattle and daub was a technique for filling in a timber framed structure with flexible, wooden “wattles” woven around supports to form panels, then covered in “daub” made from a combination of clay, dung, and chopped straw or other similar material. The panels were then limewashed or plastered to improve durability.  It took careful attention to keep the wood of the chimney properly protected from the fire, which was critical to avoid losing the entire house in flames.] By contrast, the data show that most surviving homes were over 1,535 square feet.^[FOOTNOTE OR CHART]
+Houses in Fairfax County, VA, that survive today from the eighteenth and nineteenth centuries are much larger than typical houses of the time. In colonial Virginia, a typical tenant farmer's home would have been about 16 feet long by 16 feet wide, for a total of approximately 256 square feet.^[John Ball’s house, today known as the Ball-Sellers House and located in present-day Arlington, VA (originally part of Fairfax County, and then part of the District of Columbia), is a rare surviving example of this type of home.  Built by John Ball, who lived in the house with his wife and five daughters, it measured approximately 16 feet square, had one door and one window, with a dirt floor and a partial loft above accessed by a steep ladder placed in the corner. It had a wattle and daub chimney and a stone hearth.  Wattle and daub was a technique for filling in a timber framed structure with flexible, wooden “wattles” woven around supports to form panels, then covered in “daub” made from a combination of clay, dung, and chopped straw or other similar material. The panels were then limewashed or plastered to improve durability.  It took careful attention to keep the wood of the chimney properly protected from the fire, which was critical to avoid losing the entire house in flames.] By contrast, the data show that most surviving homes are over 1,535 square feet.
 
+```{r echo = FALSE, message =  FALSE}
+source("ffx_houses.R")
+ggplot(data = house_size,
+       aes(x = decade, y = sqft_living_area))+
+  geom_point()+
+  xlim(1700, 1840)+
+  ggtitle("Size of Surviving Fairfax County Houses Built 1700-1840")
+```
+
+The data do not indicate how many of these homes were built at this larger size from the outset, and how many were added on to over the years. However, most of them have multiple fireplaces, as seen in the chart below, and it is the rare exception which does not. 
 ```{r message = FALSE, echo = FALSE}
-source("fp_per_house.R")
+source("ffx_houses.R")
 ggplot(data = fp_sqft,
   aes(x = decade, y = fireplaces, size = sqft_living_area)) + 
   geom_point() +
   xlim(1700, 1840) +
   ylim (0, 10)+
-  ggtitle("Size of Early American Houses and Number of Fireplaces")
+  ggtitle("Size of Surviving Fairfax County Houses and Number of Fireplaces Built 1700-1840")
 
 ```
+
+For the most part, larger houses have more fireplaces. In some instances, more modest sized houses have a lot of fireplaces as well. This fits with what we might expect for houses built before widespread use of central heating. The data also show a few larger houses with very few fireplaces. This finding requires further research to confirm why. One plausible explanation to explore is that the structure was originally built as an outbuilding such as a barn, which owners later converted into a house.
+
