@@ -82,14 +82,42 @@ ggplot(data = FFX_res_data_sum,
 ```
 
 
-The 1940 census added a question about the presence of central heating in homes for the first time. It is important to understand the distribution of central heating to better understand whether the fireplace is serving as the primary source of heat. The data for this question are available for a number of metropolitan areas, including Fairfax's nearby neighbor, Washington, DC. Based on the census data for Washington, DC, it is likely that central heating was prevalent in Fairfax County by the 1940 census. We can map the percentage of homes in DC that had central heat, and find that there are only a few areas with low rates of central heat.
+The 1940 census added a question about the presence of central heating in homes for the first time.^[Minnesota Population Center. National Historical Geographic Information System: Version 2.0. Minneapolis, MN: University of Minnesota 2011. http://www.nhgis.org] It is important to understand the distribution of central heating to better understand whether the fireplace is serving as the primary source of heat. The data for this question are available for a number of metropolitan areas, including Fairfax's nearby neighbor, Washington, DC. Based on the census data for Washington, DC, it is likely that central heating was prevalent in Fairfax County by the 1940 census. We can map the percentage of homes in DC that had central heat, and find that there are only a few areas with low rates of central heat.
 
 ```{r message = FALSE, echo = FALSE}
 source("census.R")
 dc
 ```
 
-Today, houses in Fairfax County are much more likely to have a fireplace than not, and the highest percentage of houses has one fireplace--the cummulative effect of the building trends of the 1980s and 1990s in Fairfax County.
+We can then compare the weighted average home value to see if that correlates with areas of low rates of central heating. Based on the map below, it appears that the story is more complicated than that. If we had data on when houses were built in DC, we could then map the age of the house as well as the home value and rate of central heating to see whether that gives us additional insight to the 1940 data.
+
+```{r message = FALSE, echo = FALSE}
+source("census.R")
+dc_values
+```
+
+Another aspect of the interplay of central heating and fireplaces is the effect of the number of fireplaces per house. In Fairfax County we see the number of fireplaces per house decline after central heating comes into use.
+
+```{r message = FALSE, echo = FALSE}
+source("fp_per_house.R")
+ggplot (data = FFX_number_fp_per_house,
+        aes(x = fireplaces, y = percentage))+
+  geom_bar(stat = "identity", position = "dodge")+ facet_wrap(~decade)+
+  ggtitle("Percentage of  Surviving Fairfax County Houses with a Given Number of Fireplaces by Decade Built")
+```
+
+Over the course of the latter half of the twentieth century, houses built without fireplaces in Fairfax County fluctuated. In the 1970s more houses were built without a fireplace than in prior decades, but in the 1980s the number of houses with fireplaces far exceeded those without. Why the surge to include a fireplace in homes built in the 1980s? In the nineteenth century some writers feared that the loss of the fireplace would negatively impact morality and the social fabric of society. Perhaps in reaction to the upheaval of the 1970s, people built homes with fireplaces as a way to express their desires for a return to a "happier" or "simpler" past.
+
+```{r message = FALSE, echo = FALSE}
+source("ffx_houses.R")
+ggplot(data = FFX_res_data_sum,
+  aes(x = decade, y = n, fill = has_fp)) + 
+  geom_bar(stat="identity", position="dodge") +
+  xlim(1950-5, 2000+5)+
+  ggtitle("Houses Built 1950s to 2000s With & Without Fireplaces")
+```
+
+Today, houses in Fairfax County are much more likely to have a fireplace than not, and the highest percentage of houses has one fireplace--the cummulative effect of building trends of the 1980s and 1990s in Fairfax County. 
 ```{r message = FALSE, echo = FALSE}
 require(scales)
 library(ggplot2)
@@ -99,3 +127,16 @@ ggplot(FFX_res_data, aes(x = fireplaces)) +
   ylab("percentage")+
   xlim(0,8)
 ```
+
+Many home designs in the 1990s emphasized an open floor plan, where kitchen and family room flowed one into the other, creating spaces that integrated socializing and cooking. Gourmet home chefs prized showpiece kitchens, which were highly desirable and sought after even by homeowners who did not cook and relied on take out or frozen meals to feed their families. High-end design features of the early 1990s, including granite countertops and stainless steel commercial-like appliances, formed the foundation of a mass-luxury consumer trend in the late 1990s and 2000s. This trend placed a premium on the luxury aesthetic, and sought to apply it even in homes of moderate cost.
+
+Catering to status-conscious homebuyers, builders incorporated luxe features such as two-story family rooms and so-called gourmet kitchens. While they mimicked aspects of their high-end counterparts, these homes were “McMansions.” Like the burger vendor, national builders put McMansions up quickly during the building boom, placing them on a disproportionately small “bun” or lot for the size of the house. 
+
+Builders created designs focused on including “must have” features, regardless of suitability. And while gourmet kitchens could “sell themselves on sheer luxury,” home builders who wanted to maximize profits learned that they could “get the same sales results with less money and space by providing three basics: clever storage, varied finishes, and innovative products.”^[Carolyn Weber and Susan Jenkins, “Ideas for Stylish Kitchens & Baths,” *Builder* 22, no. 3 (March 1999): 121]
+
+Kitchen designer Johnny Grey wrote, “The new sociable kitchen is rapidly consuming other rooms in the home—aspects of the dining room, playroom, living room, and study can all be found in contemporary kitchens.”^[James W. Krengel and Bernadette Baczynski, *Kitchens: Lifestyle & Design* (Rizzoli Publications, 1997), 7.]  Whether in new construction or in kitchen renovations, homeowners wanted larger, multifunctional spaces that allowed for family togetherness, multiple activities, and an informal style of entertaining where guests could gather in the kitchen. Desks for paying bills and monitoring children’s homework assignments, breakfast bars for eating or hanging out, and a variety of food preparation work surfaces each contributed to the shift in how families used the kitchen, extending it beyond just meal preparation. Numerous kitchen designs of the era created a focal point around the stove. Whether it was a high performance range with an equally high price tag, or a less expensive cook top, the cabinets, range hood, architectural features, and decorative treatments contributed to the atmosphere of a hearth. 
+
+Open to the kitchen, the family room generally had its own hearth area. In suburban homes of the 1990s, a family room included natural gas fireplaces far more often than their wood burning counterparts. Cleaner, easier to start, and requiring far less maintenance than traditional fireplaces, gas logs created the warmth and ambiance people sought without the time commitment, labor, or mess they dreaded. 
+
+The two aspects of the hearth had come back into proximity of each other. This proximity helped fill a desire for the reintegration of domestic work and recreation in the home that allowed all family members to participate in both. While some of the labor was less physically intensive than for colonial women, according to studies, women going into the 21st century were still shouldering a high proportion of the domestic labor. 
+
