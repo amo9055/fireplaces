@@ -89,4 +89,43 @@ ggplot(data = heating_1940,
   ylim(0, 1) + xlim(0, 30000)
 
 
+#Shape file that provides the county and state outlines for mapping
+shape_simple1940 <- readOGR("nhgis1940_shape/", "US_tractcounty_1940_simplified")
+#Fortify into dataframe for ggplot2
+shape_simple1940_df <- fortify(shape_simple1940, region = "GISJOIN")
+
+
+#As per NHGIS, this is the file needed to use to join with the data.
+shape_tract_simple <- readOGR("nhgis1940_tract_shape/", "US_tract_1940_simplified")
+shape_tract_simple_df <- fortify(shape_tract_simple, region = "GISJOIN")
+shape_tract_simple_df <- shape_tract_simple_df %>%
+  left_join(heating_1940, by = c("id" = "GISJOIN"))
+
+#Create a map with the data as well as the state and county outlines
+combined <- ggplot()+
+  #This part has the data.
+  geom_map(data = shape_tract_simple_df,
+           map = shape_tract_simple_df,
+           aes(x = long, y = lat, group = group, map_id = id, fill = percent_with_heat),
+           color = "gray",
+           size = 0.2)+
+  coord_map()+
+  #This part makes the state and county outlines
+  geom_path(data = shape_simple1940_df,
+            aes(x=long, y=lat, group=group),
+            color="black", size=0.5)+
+  theme_minimal()  
+combined
+
+dc <- combined +xlim(-77.25, -76.75) + ylim(38.75, 39) + ggtitle("District of Columbia")
+dc
+
+la <- combined +xlim(-119, -117.5) + ylim(32.75, 35) + ggtitle("Los Angeles, CA")
+la
+
+dallas <- combined + xlim(-97, -96.5) + ylim(32.5, 33) + ggtitle("Dallas, TX")
+dallas
+
+
+
 
