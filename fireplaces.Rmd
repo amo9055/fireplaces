@@ -54,5 +54,40 @@ ggplot(data = fp_sqft,
 
 ```
 
-For the most part, larger houses have more fireplaces. In some instances, more modest sized houses have a lot of fireplaces as well. This fits with what we might expect for houses built before widespread use of central heating. The data also show a few larger houses with very few fireplaces. This finding requires further research to confirm why. One plausible explanation to explore is that the structure was originally built as an outbuilding such as a barn, which owners later converted into a house.
+For the most part, larger houses have more fireplaces. In some instances, more modest sized houses have a lot of fireplaces as well. This fits with what we might expect for houses built before widespread use of central heating. The data also show a few larger houses with very few fireplaces. This finding requires further research to understand what is going on. One plausible explanation to explore is that the structure was originally built as an outbuilding such as a barn, which owners later converted into a house.
 
+Through the nineteenth century, even as technologies became more widely available to avoid the problems associated with fireplaces, few houses in Fairfax County survive today that were built with no fireplace.
+
+```{r message = FALSE, echo = FALSE}
+source("ffx_houses.R")
+ggplot(data = FFX_res_data_sum,
+  aes(x = decade, y = n, fill = has_fp)) + 
+  geom_bar(stat="identity", position="dodge") +
+  xlim(1700, 1899) +
+  ylim (0, 16)+
+  ggtitle("Houses Built 18th & 19th Centuries With & Without Fireplaces")
+```
+
+In the first part of the twentieth century, there is a growth in the number of houses built with no fireplace, particularly in the 1940s.  
+
+```{r message = FALSE, echo = FALSE}
+source("ffx_houses.R")
+ggplot(data = FFX_res_data_sum,
+  aes(x = decade, y = n, fill = has_fp)) + 
+  geom_bar(stat="identity", position="dodge") +
+  #need to make these 5 years before and after the decade I want in order to display correctly
+  xlim(1900-5, 1940+5) +
+  ylim(0, 5000)+
+  ggtitle("Number of Houses Built With & Without Fireplaces, 1900s-1940s")
+```
+
+
+
+
+```{r message = FALSE, echo = FALSE}
+require(scales)
+
+ggplot(FFX_res_data, aes(x = fireplaces)) +
+  ggtitle("Percentage of Fairfax County Houses with a Given Number Fireplaces")+
+  geom_bar(aes(y = (..count..)/sum(..count..)))
+```
