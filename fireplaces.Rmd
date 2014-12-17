@@ -68,7 +68,7 @@ ggplot(data = FFX_res_data_sum,
   ggtitle("Houses Built 18th & 19th Centuries With & Without Fireplaces")
 ```
 
-In the first part of the twentieth century, there is a growth in the number of houses built with no fireplace, particularly in the 1940s.  
+In the first part of the twentieth century, there is a growth in the number of houses built with no fireplace, particularly in the 1940s. The sharp uptick in the number of houses built in the 1940s in comparison to prior decades likely results from the critical need for additional housing during World War II for those who came to work in the government for the war effort, as well as the very beginnings of the post-war building boom that accompanied the economic expansion of the mid-twentieth century. Further research would need to be done to figure out whether the growth in houses without fireplaces was a cost saving measure, a result of material shortages due to the war effort, or motivated by some other factor.
 
 ```{r message = FALSE, echo = FALSE}
 source("ffx_houses.R")
@@ -82,8 +82,14 @@ ggplot(data = FFX_res_data_sum,
 ```
 
 
+The 1940 census added a question about the presence of central heating in homes for the first time. It is important to understand the distribution of central heating to better understand whether the fireplace is serving as the primary source of heat. The data for this question are available for a number of metropolitan areas, including Fairfax's nearby neighbor, Washington, DC. Based on the census data for Washington, DC, it is likely that central heating was prevalent in Fairfax County by the 1940 census. We can map the percentage of homes in DC that had central heat, and find that there are only a few areas with low rates of central heat.
 
+```{r message = FALSE, echo = FALSE}
+source("census.R")
+dc
+```
 
+Today, houses in Fairfax County are much more likely to have a fireplace than not, and the highest percentage of houses has one fireplace--the cummulative effect of the building trends of the 1980s and 1990s in Fairfax County.
 ```{r message = FALSE, echo = FALSE}
 require(scales)
 library(ggplot2)
