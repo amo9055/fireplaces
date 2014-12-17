@@ -86,8 +86,10 @@ ggplot(data = FFX_res_data_sum,
 
 ```{r message = FALSE, echo = FALSE}
 require(scales)
-
+library(ggplot2)
 ggplot(FFX_res_data, aes(x = fireplaces)) +
-  ggtitle("Percentage of Fairfax County Houses with a Given Number Fireplaces")+
-  geom_bar(aes(y = (..count..)/sum(..count..)))
+  ggtitle("Fairfax County Houses with a Given Number Fireplaces, All Years")+
+  geom_bar(aes(y = (..count..)/sum(..count..)))+
+  ylab("percentage")+
+  xlim(0,8)
 ```
