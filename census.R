@@ -101,7 +101,8 @@ shape_tract_simple_df <- fortify(shape_tract_simple, region = "GISJOIN")
 shape_tract_simple_df <- shape_tract_simple_df %>%
   left_join(heating_1940, by = c("id" = "GISJOIN"))
 
-#Create a map with the data as well as the state and county outlines
+#Create a map with the data as well as the state and county outlines 
+#Percentage of homes with central heat
 combined <- ggplot()+
   #This part has the data.
   geom_map(data = shape_tract_simple_df,
@@ -127,5 +128,23 @@ dallas <- combined + xlim(-97, -96.5) + ylim(32.5, 33) + ggtitle("Dallas, TX")
 dallas
 
 
+#weighted average value of homes per tract
 
+house_values <- ggplot()+
+  #This part has the data.
+  geom_map(data = shape_tract_simple_df,
+           map = shape_tract_simple_df,
+           aes(x = long, y = lat, group = group, map_id = id, fill = weighted_average),
+           color = "gray",
+           size = 0.2)+
+  coord_map()+
+  labs(legend = "Weighted Average Home Value")+
+  #This part makes the state and county outlines
+  geom_path(data = shape_simple1940_df,
+            aes(x=long, y=lat, group=group),
+            color="black", size=0.5)+
+  theme_minimal()  
+house_values
 
+dc_values <- house_values +xlim(-77.25, -76.75) + ylim(38.75, 39) + ggtitle("District of Columbia")
+dc_values
