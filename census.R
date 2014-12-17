@@ -54,4 +54,39 @@ heating_1940 <- heating_1940 %>%
   mutate(percent_without_heat = BVO002 / (BVO001 + BVO002))
 
 
+#Chart some data to see what it shows
+ggplot(data = heating_1940,
+       aes(x = COUNTY, y = weighted_average, size = percent_with_heat))+
+  geom_point()+ facet_wrap(~STATE)
+ggtitle("1940 Average Home Price and Percentage of Homes with Heat")
+
+#Find out what is going on in Illinois
+#Madison & St. Clair Counties are suburbs of St. Louis, which explains the different pattern from Cook County which is Chicago.
+il_heating_1940 <- heating_1940 %>%
+  filter(STATE == "Illinois")
+ggplot(data = il_heating_1940,
+       aes(x = COUNTY, y = weighted_average, size = percent_with_heat))+
+  geom_point()+
+  ggtitle("1940 Average Home Price and Percentage of Homes with Heat, Illinois")
+
+
+#Find out what is going on in TX
+#Dallas looks interesting
+tx_heating_1940 <- heating_1940 %>%
+  filter(STATE == "Texas")
+ggplot(data = tx_heating_1940,
+       aes(x = COUNTY, y = weighted_average, size = percent_with_heat))+
+  geom_point()+
+  ggtitle("1940 Average Home Price and Percentage of Homes with Heat, Texas")
+
+
+#Home Price and Percentage of homes with Heat, by State
+ggplot(data = heating_1940,
+       aes(x = weighted_average, y = percent_with_heat))+
+  geom_point()+ facet_wrap(~STATE)+
+  geom_smooth()+
+  ggtitle("1940 Average Home Price and Percentage of Homes with Heat")+
+  ylim(0, 1) + xlim(0, 30000)
+
+
 
