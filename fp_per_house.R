@@ -1,4 +1,4 @@
-load("../FFXData/FFXDAta.RData")
+load("FFX_res_data.Rdata")
 library(dplyr)
 library(ggplot2)
 #keep ggplot in here for plots in files where this code is included.
